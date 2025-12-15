@@ -1,0 +1,21 @@
+{
+  "name": "userauthsystem",
+  "version": "1.0.0",
+  "description": "A app for user registeration and authentication",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "mukulraj-web"
+  },
+  "author": "Mukul raj",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "mongoose": "^9.0.1"
+  }
+}
