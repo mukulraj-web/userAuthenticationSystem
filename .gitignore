@@ -1,2 +1,4 @@
 /node_modules
 .env
+user_authentication_frontend
+package-lock.json
