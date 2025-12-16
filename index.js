@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDb from "./db/index.js";
 import {User} from "./models/user.models.js"
+import {passwordHashing, comparePassword} from "./utils/bcrypt.js";
 
 dotenv.config({});
 
@@ -12,6 +13,8 @@ app.use(express.json());
 app.use(express.urlencoded({
     extended:true,
 }))
+
+
 //  Register user
 app.get("/", (req,res)=>{
     res.send("home route")
@@ -24,11 +27,6 @@ app.post("/register",async(req,res) => {
     if(!email || !username || !password){
         res.status(400).send("email and username i required");
     }
-    const user = new User({
-        email,
-        username,
-        password
-    })
     // checking if the user exists
     const existedEmail = await User.findOne({email});
     const existedUsername = await User.findOne({username});
@@ -36,8 +34,21 @@ app.post("/register",async(req,res) => {
     if(existedEmail || existedUsername){
         return res.status(400).send("user already exists..")
     }
+    // hashing password
+    const hashedPassword = await passwordHashing(password);
+    // console.log("hashed password is : ", hashedPassword);
+    
+    
+    const user = new User({
+        email,
+        username,
+        password:hashedPassword
+    })
+    
     // save user
     const fetchedData = await user.save()
+    // removing the password part.
+    fetchedData.password = undefined;
     // response
     return res.status(201).json(
         {
@@ -59,12 +70,15 @@ app.post("/login",async (req,res)=> {
     if(!user){
         return res.status(404).res("User is not registered");
     }
-    // console.log(`email: ${user.email} & password: ${user.password}`)
-    // checking password
-    if(user.password != password){
-        return res.status(404).send("user password is not correct");
-    }
-    res.status(200).send("user successfully logged in....");
+   const compare = await comparePassword(password, user.password);
+   if(!compare){
+    return res.status(404).send("password is not matching please check the password");
+   }
+   user.password  = undefined
+    res.status(201).json(
+        { message:"user successfully logged in....",
+        user
+});
     
 })
 
