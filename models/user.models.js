@@ -18,7 +18,7 @@ const userSchema  = Schema(
         password: {
             type: String,
             required: true,
-            select:false
+            // select:false :- wrong method
             // mistenly added
             // unique: true,
             // lowercase: true
