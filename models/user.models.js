@@ -19,10 +19,14 @@ const userSchema  = Schema(
             type: String,
             required: true,
             // select:false :- wrong method
-            // mistenly added
+            // mistakenly added
             // unique: true,
             // lowercase: true
-        }
+        },
+        // coverImage : {
+        //     type:String,
+        //     required: true
+        // }
 
     }, {timestamps: true})
 
