@@ -30,7 +30,8 @@ const registerUser = (async(req,res) => {
         const coverImage = await uploadOnCloudinary(coverImageLocalPath);
 
 
-console.log("cover Image ",coverImage);
+// console.log("cover Image ",coverImage);
+if(!coverImage) return res.status(404).send("Cover Image is required.!!!")
     // hashing password
     const hashedPassword = await passwordHashing(password);
     // console.log("hashed password is : ", hashedPassword);
@@ -39,7 +40,8 @@ console.log("cover Image ",coverImage);
     const user = new User({
         email,
         username,
-        password:hashedPassword
+        password:hashedPassword,
+        coverImage: coverImage.url
     })
     
     // save user
@@ -49,7 +51,7 @@ console.log("cover Image ",coverImage);
     // response
     return res.status(201).json(
         {
-            message:`user created successfully. cover Image local path is ${coverImageLocalPath}`,
+            message:`user created successfully`,
             fetchedData,
             
         }

@@ -23,10 +23,10 @@ const userSchema  = Schema(
             // unique: true,
             // lowercase: true
         },
-        // coverImage : {
-        //     type:String,
-        //     required: true
-        // }
+        coverImage : {
+            type:String,
+            required: true
+        }
 
     }, {timestamps: true})
 
