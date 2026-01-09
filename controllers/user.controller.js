@@ -1,7 +1,7 @@
 import {User} from "../models/user.models.js"
 import {passwordHashing, comparePassword} from "../utils/bcrypt.js";
 import uploadOnCloudinary from "../utils/cloudinary.js"
-
+import sendEmail from "../utils/emailSender.js"
 // console.log("fetching the controllers")
 
 const registerUser = (async(req,res) => {
@@ -81,9 +81,37 @@ const loginUser = (async (req,res)=> {
 });
     
 })
+const sendEmailController = (async (req,res)=> {
+    try {
+        const {name, email, phone, address, category, description} = req.body;
+        const emailText = `
+        Name:${name},
+        Email: ${email},
+        Phone: ${phone},
+        Address: ${address},
+        Category: ${category},
+        Description: ${description}
+        `;
 
+        await sendEmail(
+            {
+                from:email,
+                to: process.env.EMAIL_USER,
+                subject: `New request from ${name}`,
+                text : emailText
+            })
+            res.status(200).json({success:true, message:"Request sent successfully"})
+        
+    }catch(err)
+    {
+        res.status(500).send("failed to send email.", err);
+        console.log(err)
+    }
+})
 
 export {
     registerUser,
-    loginUser
+    loginUser,
+    sendEmailController
+
 }
