@@ -82,6 +82,7 @@ const loginUser = (async (req,res)=> {
     
 })
 const sendEmailController = (async (req,res)=> {
+    // console.log(req.body);
     try {
         const {name, email, phone, address, category, description} = req.body;
         const emailText = `
